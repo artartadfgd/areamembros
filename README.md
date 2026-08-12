@@ -1,4 +1,4 @@
-# Cache — member area
+# Teacher Jessica Miller — member area
 
 A digital products membership app. Payments happen on Hotmart; this app
 receives Hotmart's webhook, records who bought what (by email), and
@@ -42,8 +42,10 @@ that show up in `purchases`.
 1. **Create a Supabase project** (free tier is fine) at
    [supabase.com](https://supabase.com).
 2. **Apply the schema**: in the Supabase dashboard, open the SQL editor
-   and run the contents of `supabase/migrations/0001_init.sql` (or use
-   the CLI: `supabase link --project-ref <ref> && supabase db push`).
+   and run the contents of `supabase/migrations/0001_init.sql`, then
+   `0002_storage.sql` (creates the public `product-covers` bucket used
+   for cover photos) — or use the CLI:
+   `supabase link --project-ref <ref> && supabase db push`.
 3. **Set environment variables** — copy `.env.example` to `.env.local`
    for local dev, and add the same keys in Vercel (Project Settings →
    Environment Variables):
@@ -59,9 +61,10 @@ that show up in `purchases`.
 4. **Add your products** at `/admin` (log in with `ADMIN_PASSWORD`).
    For each of the 5 products, you'll need from Hotmart: the product's
    ID (Hotmart product page → it's in the URL/settings) and its
-   checkout link. Price, description and cover come from you — there's
-   no cover image upload yet, so covers stay as the generated icon
-   until that's added.
+   checkout link. Price, description, and an optional cover photo come
+   from you — upload a JPG/PNG in the product form and it's stored in
+   Supabase Storage; leave it empty and the catalog shows a colored
+   icon instead.
 5. **Configure the Hotmart webhook**: in Hotmart, per product (or
    account-wide) → Webhook/Postback settings → set the URL to
    `https://<your-domain>/api/webhooks/hotmart`, and copy the "Hottok"
@@ -123,11 +126,13 @@ components/                     ProductCard, header, locale switcher, theme, etc
 components/admin/                admin panel form + delete button
 lib/
   types.ts                      types mirroring the database schema
+  site-config.ts                 brand name + header initials — edit this to rebrand
+  product-type-colors.ts        the color per product type (badges, covers)
   mock-data.ts                  mock catalog fallback (no Supabase configured)
   get-catalog.ts                real catalog + unlock status from Supabase
   session.ts                    signed cookies for customer + admin sessions
   hotmart.ts                    Hotmart webhook payload/status mapping
   actions/                      Server Actions (login, logout, admin auth, products)
   supabase/                     Supabase clients (browser, server, admin)
-supabase/migrations/            SQL schema
+supabase/migrations/            SQL schema (0001 tables, 0002 storage bucket)
 ```

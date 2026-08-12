@@ -16,12 +16,12 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
         <Link
           href="/"
-          className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight text-ink"
+          className="flex min-w-0 items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-ink sm:text-xl"
         >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-sm font-bold text-accent-ink">
-            {siteConfig.name.charAt(0)}
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-bold text-accent-ink">
+            {siteConfig.initials}
           </span>
-          {siteConfig.name}
+          <span className="truncate">{siteConfig.name}</span>
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-4">

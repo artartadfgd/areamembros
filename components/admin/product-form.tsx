@@ -50,6 +50,32 @@ export function ProductForm({ product }: { product?: Product }) {
       </div>
 
       <div className="flex flex-col gap-1.5">
+        <label className={labelClass} htmlFor="coverImage">
+          Cover photo (optional — falls back to a colored icon if empty)
+        </label>
+        {product?.coverUrl && (
+          // eslint-disable-next-line @next/next/no-img-element -- admin-only preview of an already-uploaded file
+          <img
+            src={product.coverUrl}
+            alt=""
+            className="h-32 w-full max-w-xs rounded-md border border-border object-cover"
+          />
+        )}
+        <input
+          id="coverImage"
+          name="coverImage"
+          type="file"
+          accept="image/*"
+          className="text-sm text-ink-muted file:mr-3 file:rounded-full file:border-0 file:bg-bg-subtle file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-ink hover:file:bg-border"
+        />
+        <p className="text-xs text-ink-faint">
+          {product?.coverUrl
+            ? "Choose a file to replace the current photo, or leave empty to keep it."
+            : "JPG or PNG, a few MB max."}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
         <label className={labelClass} htmlFor="description">
           Full description (shown on the product page)
         </label>

@@ -1,3 +1,5 @@
 export const siteConfig = {
-  name: "Cache",
+  name: "Teacher Jessica Miller",
+  /** Shown in the small round mark next to the name in the header. */
+  initials: "JM",
 };

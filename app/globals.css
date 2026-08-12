@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /*
-  Identidade visual — "Cache"
+  Identidade visual — Teacher Jessica Miller
   Estética educacional: fundo branco fixo (sem dark mode) com um
-  sistema de cores fortes — um laranja-avermelhado como acento
+  sistema de cores fortes — um vermelho-framboesa como acento
   principal (compre agora, links, foco) e uma cor viva por tipo de
   produto (curso, vídeo, e-book, pacote de arquivos, outro), lembrando
   a codificação por cor de material escolar. Ver lib/product-type-colors.ts
@@ -21,10 +21,10 @@
   --color-ink-muted: #5b6172;
   --color-ink-faint: #9aa0af;
 
-  --color-accent: #ff5a36;
-  --color-accent-hover: #e8481f;
+  --color-accent: #e11d48;
+  --color-accent-hover: #be123c;
   --color-accent-ink: #ffffff;
-  --color-accent-soft: #ffe4da;
+  --color-accent-soft: #ffe4e9;
 
   --color-success: #16a34a;
   --color-success-soft: #dcfce7;

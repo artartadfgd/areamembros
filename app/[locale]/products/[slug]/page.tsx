@@ -49,7 +49,11 @@ export default async function ProductPage({
         </Link>
 
         <div className="mt-6 overflow-hidden rounded-2xl border border-border">
-          <ProductCover type={product.type} className="h-56 w-full sm:h-72" />
+          <ProductCover
+            type={product.type}
+            coverUrl={product.coverUrl}
+            className="h-56 w-full sm:h-72"
+          />
         </div>
 
         <div className="mt-8 flex flex-wrap items-start justify-between gap-6">

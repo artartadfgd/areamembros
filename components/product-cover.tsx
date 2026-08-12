@@ -4,11 +4,10 @@ import { PRODUCT_TYPE_COLOR } from "@/lib/product-type-colors";
 import { cn } from "@/lib/cn";
 
 /**
- * We don't have real cover images yet, so we generate an on-brand
- * cover instead: a soft tint of the product's type color with a bold
- * icon, plus a thicker color bar along the bottom edge — like a
- * color-coded school folder. Once `coverUrl` exists, the ProductCard
- * swaps this out for the real image.
+ * Shows the product's real cover photo when one was uploaded in
+ * /admin. Otherwise generates an on-brand placeholder instead: a soft
+ * tint of the product's type color with a bold icon, plus a thicker
+ * color bar along the bottom edge — like a color-coded school folder.
  */
 const ICONS: Record<ProductType, typeof BookOpen> = {
   course: BookOpen,
@@ -20,11 +19,20 @@ const ICONS: Record<ProductType, typeof BookOpen> = {
 
 export function ProductCover({
   type,
+  coverUrl,
   className,
 }: {
   type: ProductType;
+  coverUrl?: string | null;
   className?: string;
 }) {
+  if (coverUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- covers come from an admin-chosen Supabase Storage URL, not a fixed domain we can preconfigure for next/image
+      <img src={coverUrl} alt="" className={cn("object-cover", className)} />
+    );
+  }
+
   const Icon = ICONS[type];
   const color = PRODUCT_TYPE_COLOR[type];
 

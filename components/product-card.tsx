@@ -44,6 +44,7 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
         <div className="relative aspect-[16/10] overflow-hidden">
           <ProductCover
             type={product.type}
+            coverUrl={product.coverUrl}
             className="h-full w-full transition-transform duration-500 group-hover:scale-105"
           />
 

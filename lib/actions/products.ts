@@ -49,7 +49,7 @@ export async function saveProductAction(
   const priceCents = Number.isFinite(priceDollars) ? Math.round(priceDollars * 100) : 0;
   const sortOrder = Number(formData.get("sortOrder") ?? 0);
 
-  const row = {
+  const row: Record<string, unknown> = {
     title,
     slug,
     short_description: field(formData, "shortDescription"),
@@ -66,6 +66,22 @@ export async function saveProductAction(
   };
 
   const supabase = createAdminClient();
+
+  const coverImage = formData.get("coverImage");
+  if (coverImage instanceof File && coverImage.size > 0) {
+    const extension = coverImage.name.split(".").pop() || "jpg";
+    const path = `${slug}-${Date.now()}.${extension}`;
+    const { error: uploadError } = await supabase.storage
+      .from("product-covers")
+      .upload(path, coverImage, { contentType: coverImage.type, upsert: true });
+
+    if (uploadError) {
+      return { error: `Cover photo upload failed: ${uploadError.message}` };
+    }
+
+    row.cover_url = supabase.storage.from("product-covers").getPublicUrl(path).data.publicUrl;
+  }
+
   const { error } = id
     ? await supabase.from("products").update(row).eq("id", id)
     : await supabase.from("products").insert(row);
