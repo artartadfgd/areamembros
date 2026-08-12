@@ -4,7 +4,6 @@
     "description": "Access the digital products you've purchased and browse the rest of the catalog."
   },
   "Nav": {
-    "login": "Already purchased? Log in",
     "loggedInAs": "Signed in as {email}",
     "logOut": "Log out"
   },
@@ -51,8 +50,7 @@
     "submitPending": "Checking…",
     "errorInvalidEmail": "Enter a valid email address.",
     "errorNoPurchase": "We couldn't find an approved purchase for this email.",
-    "errorUnexpected": "Something went wrong. Please try again.",
-    "back": "Back to catalog"
+    "errorUnexpected": "Something went wrong. Please try again."
   },
   "Footer": {
     "tagline": "member area"

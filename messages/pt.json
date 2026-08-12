@@ -4,7 +4,6 @@
     "description": "Acesse os produtos digitais que você comprou e conheça o restante do catálogo."
   },
   "Nav": {
-    "login": "Já comprei, entrar",
     "loggedInAs": "Logado como {email}",
     "logOut": "Sair"
   },
@@ -51,8 +50,7 @@
     "submitPending": "Verificando…",
     "errorInvalidEmail": "Digite um e-mail válido.",
     "errorNoPurchase": "Não encontramos uma compra aprovada para esse e-mail.",
-    "errorUnexpected": "Algo deu errado. Tente novamente.",
-    "back": "Voltar ao acervo"
+    "errorUnexpected": "Algo deu errado. Tente novamente."
   },
   "Footer": {
     "tagline": "área de membros"

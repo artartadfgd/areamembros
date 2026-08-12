@@ -41,14 +41,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
                 </button>
               </form>
             </div>
-          ) : (
-            <Link
-              href="/login"
-              className="hidden rounded-md border border-border px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-border-strong sm:inline-flex"
-            >
-              {t("login")}
-            </Link>
-          )}
+          ) : null}
           <LocaleSwitcher />
           <ThemeToggle />
         </div>

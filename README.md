@@ -15,13 +15,16 @@ just types the email they bought with.
 
 ## How it works
 
-- **Catalog** (`/`): every published product, unlocked or not. Locked
-  cards open a popup with a short description and a "Buy now" link
-  instead of navigating away.
-- **Login** (`/login`): the customer types their purchase email. The
-  server checks for an approved purchase for that email and, if found,
-  sets a signed session cookie — no password, no account created by the
-  user (`lib/session.ts`, `app/[locale]/login/actions.ts`).
+- **`/` is the gate**: signed out, it's just the email login screen —
+  nothing else is visible until the customer enters the email they
+  bought with. The server checks for an approved purchase for that
+  email and, if found, sets a signed session cookie — no password, no
+  account creation (`lib/session.ts`, `lib/actions/login.ts`).
+- **Catalog** (also `/`, once signed in): every published product,
+  unlocked or not. Locked cards open a popup with a short description
+  and a "Buy now" link instead of navigating away. Product detail pages
+  (`/products/[slug]`) require the same session and bounce back to `/`
+  if it's missing.
 - **Hotmart webhook** (`/api/webhooks/hotmart`): Hotmart calls this on
   every purchase event. It's matched to a product by
   `hotmart_product_id` and stored in `purchases`, keyed by the buyer's
@@ -67,7 +70,7 @@ that show up in `purchases`.
    the real Hotmart product ID exactly.
 6. **Test end to end**: make a real (or Hotmart sandbox) purchase →
    confirm a row appears in `purchases` with `status = approved` →
-   go to `/login`, enter that email → the matching product should show
+   go to `/`, enter that email → the matching product should show
    unlocked on the catalog.
 
 Until steps 1–3 are done, the site keeps running on mock data
@@ -107,9 +110,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```
 app/[locale]/
-  page.tsx                     catalog — every product, locked or not
-  products/[slug]/page.tsx     product detail + content (if unlocked)
-  login/page.tsx, actions.ts   email-login page + Server Action
+  page.tsx                     the gate: login screen if signed out, catalog if signed in
+  products/[slug]/page.tsx     product detail + content (requires a session)
   layout.tsx                    locale validation + i18n provider
 app/
   layout.tsx                    true root layout: fonts, theme
@@ -125,7 +127,7 @@ lib/
   get-catalog.ts                real catalog + unlock status from Supabase
   session.ts                    signed cookies for customer + admin sessions
   hotmart.ts                    Hotmart webhook payload/status mapping
-  actions/                      Server Actions (logout, admin auth, products)
+  actions/                      Server Actions (login, logout, admin auth, products)
   supabase/                     Supabase clients (browser, server, admin)
 supabase/migrations/            SQL schema
 ```

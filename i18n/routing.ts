@@ -11,11 +11,6 @@ export const routing = defineRouting({
   localePrefix: "as-needed",
   pathnames: {
     "/": "/",
-    "/login": {
-      en: "/login",
-      pt: "/entrar",
-      es: "/iniciar-sesion",
-    },
     "/products/[slug]": {
       en: "/products/[slug]",
       pt: "/produtos/[slug]",

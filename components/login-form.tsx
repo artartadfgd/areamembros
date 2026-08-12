@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
-import { loginAction, type LoginState } from "@/app/[locale]/login/actions";
+import { loginAction, type LoginState } from "@/lib/actions/login";
 import type { Locale } from "@/i18n/routing";
 
 const initialState: LoginState = { error: null };

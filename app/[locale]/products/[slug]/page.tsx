@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowUpRight, CheckCircle2, FileText, Link as LinkIcon, Lock, PlayCircle } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { ProductCover } from "@/components/product-cover";
 import { getCatalogProduct } from "@/lib/get-catalog";
+import { getSession } from "@/lib/session";
 import { formatPrice } from "@/lib/format";
 import type { ContentItem } from "@/lib/types";
 import type { Locale } from "@/i18n/routing";
@@ -23,6 +24,10 @@ export default async function ProductPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+
+  const session = await getSession();
+  if (!session) redirect({ href: "/", locale });
+
   const t = await getTranslations("ProductPage");
   const tType = await getTranslations("ProductType");
 

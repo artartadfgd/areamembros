@@ -2,17 +2,37 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { ProductCard } from "@/components/product-card";
 import { EmptyState } from "@/components/empty-state";
+import { LoginForm } from "@/components/login-form";
 import { getCatalog } from "@/lib/get-catalog";
+import { getSession } from "@/lib/session";
 import { siteConfig } from "@/lib/site-config";
 import type { Locale } from "@/i18n/routing";
 
-export default async function CatalogPage({
+export default async function HomePage({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  const session = await getSession();
+
+  if (!session) {
+    const t = await getTranslations("LoginPage");
+
+    return (
+      <div className="flex min-h-screen flex-col">
+        <SiteHeader locale={locale} />
+        <main className="mx-auto flex w-full max-w-sm flex-1 flex-col items-center justify-center px-5 text-center">
+          <h1 className="font-display text-2xl font-medium text-ink">{t("title")}</h1>
+          <p className="mt-3 text-sm leading-relaxed text-ink-muted">{t("description")}</p>
+          <LoginForm locale={locale} />
+        </main>
+      </div>
+    );
+  }
+
   const t = await getTranslations("Catalog");
   const tFooter = await getTranslations("Footer");
 
