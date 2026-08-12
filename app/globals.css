@@ -1,13 +1,18 @@
 @import "tailwindcss";
 
+/* Enables Tailwind's `dark:` variant by class (next-themes sets
+   `class="dark"` on <html>) instead of only prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
   Identidade visual — Teacher Jessica Miller
-  Estética educacional: fundo branco fixo (sem dark mode) com um
-  sistema de cores fortes — um vermelho-framboesa como acento
+  Estética educacional: branco por padrão, com um tema escuro opcional
+  (alternador no cabeçalho) — um vermelho-framboesa como acento
   principal (compre agora, links, foco) e uma cor viva por tipo de
   produto (curso, vídeo, e-book, pacote de arquivos, outro), lembrando
-  a codificação por cor de material escolar. Ver lib/product-type-colors.ts
-  para os valores usados nos badges/capas por tipo.
+  a codificação por cor de material escolar. As cores por tipo também
+  vivem aqui (--type-*) para que o tema escuro as ajuste automaticamente
+  — ver lib/product-type-colors.ts, que só referencia essas variáveis.
 */
 :root {
   --color-bg: #ffffff;
@@ -32,6 +37,71 @@
 
   --color-overlay: 10 12 18;
   --shadow-color: 30 35 55;
+
+  --type-course: #2f6fed;
+  --type-course-soft: #e3ecfe;
+  --type-course-ink: #1d4fbf;
+
+  --type-video: #8b5cf6;
+  --type-video-soft: #efe9fe;
+  --type-video-ink: #6d3fe0;
+
+  --type-ebook: #0ea5a8;
+  --type-ebook-soft: #dbf5f5;
+  --type-ebook-ink: #0b7a7d;
+
+  --type-bundle: #ec4899;
+  --type-bundle-soft: #fce7f3;
+  --type-bundle-ink: #c22a72;
+
+  --type-other: #f59e0b;
+  --type-other-soft: #fef3c7;
+  --type-other-ink: #b4740a;
+}
+
+.dark {
+  --color-bg: #14171f;
+  --color-bg-subtle: #1b1f2a;
+  --color-surface: #1e222d;
+  --color-surface-hover: #262b38;
+  --color-border: #2f3542;
+  --color-border-strong: #454c5c;
+
+  --color-ink: #f4f5f8;
+  --color-ink-muted: #a7acba;
+  --color-ink-faint: #6d7384;
+
+  --color-accent: #ff5c7f;
+  --color-accent-hover: #ff7a97;
+  --color-accent-ink: #1a0509;
+  --color-accent-soft: #3a1420;
+
+  --color-success: #34d399;
+  --color-success-soft: #113322;
+  --color-success-ink: #86f0c4;
+
+  --color-overlay: 4 5 8;
+  --shadow-color: 0 0 0;
+
+  --type-course: #6e9bff;
+  --type-course-soft: #16223f;
+  --type-course-ink: #b7cbff;
+
+  --type-video: #b294ff;
+  --type-video-soft: #241a3f;
+  --type-video-ink: #d9c8ff;
+
+  --type-ebook: #2dd4d1;
+  --type-ebook-soft: #0f2b2b;
+  --type-ebook-ink: #8fe9e6;
+
+  --type-bundle: #ff8fc0;
+  --type-bundle-soft: #3a1428;
+  --type-bundle-ink: #ffc2de;
+
+  --type-other: #ffc24d;
+  --type-other-soft: #3a2a0a;
+  --type-other-ink: #ffdf9e;
 }
 
 @theme inline {
@@ -65,6 +135,10 @@
 
 html {
   color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {

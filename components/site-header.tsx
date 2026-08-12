@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { LogOut } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
+import { ThemeToggle } from "./theme-toggle";
 import { siteConfig } from "@/lib/site-config";
 import { getSession } from "@/lib/session";
 import { logoutAction } from "@/lib/actions/logout";
@@ -53,6 +54,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             </div>
           ) : null}
           <LocaleSwitcher />
+          <ThemeToggle />
         </div>
       </div>
     </header>

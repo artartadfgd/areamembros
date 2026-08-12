@@ -44,10 +44,20 @@ export async function loginAction(
     return { error: "noPurchase" };
   }
 
+  const { data: existingCustomer } = await supabase
+    .from("customers")
+    .select("last_login_at")
+    .eq("email", email)
+    .maybeSingle();
+  const isFirstLogin = !existingCustomer?.last_login_at;
+
   await supabase
     .from("customers")
     .upsert({ email, last_login_at: new Date().toISOString() }, { onConflict: "email" });
 
   await createSession(email);
-  return redirect({ href: "/", locale });
+  return redirect({
+    href: { pathname: "/", query: isFirstLogin ? { welcome: "1" } : undefined },
+    locale,
+  });
 }

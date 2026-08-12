@@ -81,3 +81,20 @@ export async function getCatalogProduct(slug: string): Promise<CatalogProduct | 
   const catalog = await getCatalog();
   return catalog.find((product) => product.slug === slug) ?? null;
 }
+
+/**
+ * Picks one product to offer a customer right after their first login:
+ * prefers a locked product that shares a type with something they
+ * already own (similar/complementary), falling back to the next
+ * locked product in catalog order. Returns null once everything is
+ * unlocked — nothing left to offer.
+ */
+export function getRecommendedProduct(catalog: CatalogProduct[]): CatalogProduct | null {
+  const owned = catalog.filter((p) => p.isUnlocked);
+  const locked = catalog.filter((p) => !p.isUnlocked);
+
+  if (locked.length === 0) return null;
+
+  const ownedTypes = new Set(owned.map((p) => p.type));
+  return locked.find((p) => ownedTypes.has(p.type)) ?? locked[0];
+}

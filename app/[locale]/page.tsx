@@ -3,17 +3,21 @@ import { SiteHeader } from "@/components/site-header";
 import { ProductCard } from "@/components/product-card";
 import { EmptyState } from "@/components/empty-state";
 import { LoginForm } from "@/components/login-form";
-import { getCatalog } from "@/lib/get-catalog";
+import { WelcomeOfferModal } from "@/components/welcome-offer-modal";
+import { getCatalog, getRecommendedProduct } from "@/lib/get-catalog";
 import { getSession } from "@/lib/session";
 import { siteConfig } from "@/lib/site-config";
 import type { Locale } from "@/i18n/routing";
 
 export default async function HomePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ welcome?: string }>;
 }) {
   const { locale } = await params;
+  const { welcome } = await searchParams;
   setRequestLocale(locale);
 
   const session = await getSession();
@@ -38,10 +42,15 @@ export default async function HomePage({
 
   const products = await getCatalog();
   const unlockedCount = products.filter((p) => p.isUnlocked).length;
+  const recommendedProduct = welcome === "1" ? getRecommendedProduct(products) : null;
 
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader locale={locale} />
+
+      {recommendedProduct && (
+        <WelcomeOfferModal product={recommendedProduct} locale={locale} />
+      )}
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
         <div className="max-w-2xl">

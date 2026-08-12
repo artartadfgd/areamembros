@@ -6,14 +6,38 @@ import type { ProductType } from "./types";
  * `strong` is the bold color (icons, borders), `soft` is its light
  * tint (badge/cover background), `ink` is a readable-on-`soft` shade
  * of the same hue (badge text).
+ *
+ * These point at the `--type-*` custom properties in app/globals.css
+ * (not raw hex) so the dark theme can swap in its own values — the
+ * browser resolves the right one at paint time, no JS involved.
  */
 export const PRODUCT_TYPE_COLOR: Record<
   ProductType,
   { strong: string; soft: string; ink: string }
 > = {
-  course: { strong: "#2F6FED", soft: "#E3ECFE", ink: "#1D4FBF" },
-  video: { strong: "#8B5CF6", soft: "#EFE9FE", ink: "#6D3FE0" },
-  ebook: { strong: "#0EA5A8", soft: "#DBF5F5", ink: "#0B7A7D" },
-  file_bundle: { strong: "#EC4899", soft: "#FCE7F3", ink: "#C22A72" },
-  other: { strong: "#F59E0B", soft: "#FEF3C7", ink: "#B4740A" },
+  course: {
+    strong: "var(--type-course)",
+    soft: "var(--type-course-soft)",
+    ink: "var(--type-course-ink)",
+  },
+  video: {
+    strong: "var(--type-video)",
+    soft: "var(--type-video-soft)",
+    ink: "var(--type-video-ink)",
+  },
+  ebook: {
+    strong: "var(--type-ebook)",
+    soft: "var(--type-ebook-soft)",
+    ink: "var(--type-ebook-ink)",
+  },
+  file_bundle: {
+    strong: "var(--type-bundle)",
+    soft: "var(--type-bundle-soft)",
+    ink: "var(--type-bundle-ink)",
+  },
+  other: {
+    strong: "var(--type-other)",
+    soft: "var(--type-other-soft)",
+    ink: "var(--type-other-ink)",
+  },
 };

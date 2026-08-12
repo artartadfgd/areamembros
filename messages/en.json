@@ -52,6 +52,13 @@
     "errorNoPurchase": "We couldn't find an approved purchase for this email.",
     "errorUnexpected": "Something went wrong. Please try again."
   },
+  "WelcomeOffer": {
+    "badge": "Recommended for you",
+    "body": "Welcome! Since you're here, this one pairs well with what you already own.",
+    "buyNow": "Buy now",
+    "dismiss": "Maybe later",
+    "close": "Close"
+  },
   "Footer": {
     "tagline": "member area"
   },
