@@ -1,14 +1,8 @@
 import "server-only";
-import { createAdminClient } from "./supabase/admin";
+import { createAdminClient, isSupabaseConfigured } from "./supabase/admin";
 import { getSession } from "./session";
 import { mockCatalog } from "./mock-data";
 import type { CatalogProduct, Product } from "./types";
-
-function isSupabaseConfigured() {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
-  );
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- raw Supabase row, shape guaranteed by the migration
 export function mapProductRow(row: any): Product {

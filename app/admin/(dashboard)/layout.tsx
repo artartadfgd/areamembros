@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdmin } from "@/lib/session";
 import { adminLogoutAction } from "@/lib/actions/admin-auth";
@@ -14,9 +15,25 @@ export default async function AdminDashboardLayout({
     <div className="flex min-h-screen flex-col">
       <header className="border-b border-border">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-5">
-          <span className="font-display text-sm font-medium text-ink">
-            {siteConfig.name} admin
-          </span>
+          <div className="flex items-center gap-6">
+            <span className="font-display text-sm font-medium text-ink">
+              {siteConfig.name} admin
+            </span>
+            <nav className="flex items-center gap-4">
+              <Link
+                href="/admin"
+                className="text-sm text-ink-muted transition-colors hover:text-ink"
+              >
+                Products
+              </Link>
+              <Link
+                href="/admin/access"
+                className="text-sm text-ink-muted transition-colors hover:text-ink"
+              >
+                Grant access
+              </Link>
+            </nav>
+          </div>
           <form action={adminLogoutAction}>
             <button
               type="submit"

@@ -1,6 +1,15 @@
 import "server-only";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
+/** True once the three Supabase env vars this app needs are set. Check
+ *  this before calling createAdminClient() anywhere the app might run
+ *  before they're configured (e.g. right after deploying). */
+export function isSupabaseConfigured() {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+}
+
 /**
  * Cliente Supabase com a service role key — ignora RLS.
  *

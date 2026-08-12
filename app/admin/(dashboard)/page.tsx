@@ -1,13 +1,9 @@
 import Link from "next/link";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/admin";
 import { formatPrice } from "@/lib/format";
 
 export default async function AdminProductsPage() {
-  const configured = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
-  );
-
-  if (!configured) {
+  if (!isSupabaseConfigured()) {
     return (
       <div className="rounded-xl border border-dashed border-border p-6 text-sm text-ink-muted">
         Supabase isn&apos;t configured yet — set{" "}
