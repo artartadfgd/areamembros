@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { LogOut } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -18,9 +19,19 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           href="/"
           className="flex min-w-0 items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-ink sm:text-xl"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-bold text-accent-ink">
-            {siteConfig.initials}
-          </span>
+          {siteConfig.avatarUrl ? (
+            <Image
+              src={siteConfig.avatarUrl}
+              alt=""
+              width={36}
+              height={36}
+              className="h-9 w-9 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-bold text-accent-ink">
+              {siteConfig.initials}
+            </span>
+          )}
           <span className="truncate">{siteConfig.name}</span>
         </Link>
 
