@@ -71,7 +71,7 @@ export function ProductForm({ product }: { product?: Product }) {
         <p className="text-xs text-ink-faint">
           {product?.coverUrl
             ? "Choose a file to replace the current photo, or leave empty to keep it."
-            : "JPG or PNG, a few MB max."}
+            : "JPG or PNG, up to 3MB."}
         </p>
       </div>
 
