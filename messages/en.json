@@ -5,7 +5,8 @@
   },
   "Nav": {
     "loggedInAs": "Signed in as {email}",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "support": "Support"
   },
   "Catalog": {
     "eyebrow": "Your member area",

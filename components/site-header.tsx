@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { LogOut } from "lucide-react";
+import { LogOut, LifeBuoy } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "./theme-toggle";
@@ -37,6 +37,13 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-4">
+          <a
+            href={`mailto:${siteConfig.supportEmail}`}
+            className="flex items-center gap-1.5 rounded-full bg-accent px-3 py-2 text-sm font-semibold text-accent-ink shadow-sm transition-colors hover:bg-accent-hover sm:px-4"
+          >
+            <LifeBuoy className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+            <span className="hidden sm:inline">{t("support")}</span>
+          </a>
           {session ? (
             <div className="hidden items-center gap-3 sm:flex">
               <span className="max-w-[14rem] truncate text-sm text-ink-muted">

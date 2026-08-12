@@ -5,7 +5,8 @@
   },
   "Nav": {
     "loggedInAs": "Sesión iniciada como {email}",
-    "logOut": "Cerrar sesión"
+    "logOut": "Cerrar sesión",
+    "support": "Soporte"
   },
   "Catalog": {
     "eyebrow": "Tu área de miembros",

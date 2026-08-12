@@ -6,4 +6,5 @@ export const siteConfig = {
   /** Photo shown in that same round mark. Set to null to fall back to
    *  the initials instead. */
   avatarUrl: "/jessica-miller.jpg",
+  supportEmail: "suportesafeoffer@hotmail.com",
 };
