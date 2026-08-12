@@ -56,6 +56,8 @@ that show up in `purchases`.
    - `ADMIN_PASSWORD` — the password for `/admin`. Pick something long;
      there's no username, just this password.
    - `HOTMART_WEBHOOK_TOKEN` — see step 5.
+   - `HOTMART_CLIENT_ID`, `HOTMART_CLIENT_SECRET`, `HOTMART_BASIC_TOKEN`
+     (optional but recommended) — see step 6.
    - Redeploy after adding these (Vercel only picks up env vars on a new
      build).
 4. **Add your products** at `/admin` (log in with `ADMIN_PASSWORD`).
@@ -71,7 +73,20 @@ that show up in `purchases`.
    value Hotmart shows you into `HOTMART_WEBHOOK_TOKEN`. Make sure the
    `hotmart_product_id` you set in `/admin` for each product matches
    the real Hotmart product ID exactly.
-6. **Test end to end**: make a real (or Hotmart sandbox) purchase →
+6. **(Recommended) Set up the Hotmart API as a login fallback**: the
+   webhook only records purchases made *after* it's configured — if a
+   customer's login gets rejected even though they really bought, it's
+   usually because their purchase predates the webhook, or a webhook
+   delivery didn't arrive. To cover that, in Hotmart go to
+   Tools → Developer Tools → Credentials → create a new credential set,
+   and set `HOTMART_CLIENT_ID`, `HOTMART_CLIENT_SECRET`, and
+   `HOTMART_BASIC_TOKEN` from the values shown there. With these set,
+   whenever someone logs in with no local purchase on file, the app asks
+   Hotmart's API directly before rejecting them — and if it finds an
+   approved purchase, it saves it locally so future logins are instant.
+   This needs to be the same Hotmart account/producer that sells the
+   products in `/admin`.
+7. **Test end to end**: make a real (or Hotmart sandbox) purchase →
    confirm a row appears in `purchases` with `status = approved` →
    go to `/`, enter that email → the matching product should show
    unlocked on the catalog.
@@ -132,6 +147,8 @@ lib/
   get-catalog.ts                real catalog + unlock status from Supabase
   session.ts                    signed cookies for customer + admin sessions
   hotmart.ts                    Hotmart webhook payload/status mapping
+  hotmart-api.ts                 live Hotmart Sales API fallback for login
+  hotmart-sync.ts                shared purchase-upsert logic (webhook + login fallback)
   actions/                      Server Actions (login, logout, admin auth, products)
   supabase/                     Supabase clients (browser, server, admin)
 supabase/migrations/            SQL schema (0001 tables, 0002 storage bucket)

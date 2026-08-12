@@ -3,6 +3,8 @@
 import { redirect } from "@/i18n/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createSession } from "@/lib/session";
+import { fetchApprovedHotmartPurchases } from "@/lib/hotmart-api";
+import { upsertHotmartPurchase } from "@/lib/hotmart-sync";
 import type { Locale } from "@/i18n/routing";
 
 export type LoginState = {
@@ -40,7 +42,28 @@ export async function loginAction(
     return { error: "unexpected" };
   }
 
-  if (!data || data.length === 0) {
+  let hasApprovedPurchase = Boolean(data && data.length > 0);
+
+  // No local record — ask Hotmart directly before giving up. Covers
+  // purchases made before the webhook was set up, or a delivery it missed.
+  if (!hasApprovedPurchase) {
+    const liveSales = await fetchApprovedHotmartPurchases(email);
+    if (liveSales.length > 0) {
+      await supabase.from("customers").upsert({ email }, { onConflict: "email", ignoreDuplicates: true });
+      for (const sale of liveSales) {
+        await upsertHotmartPurchase(supabase, {
+          email,
+          hotmartProductId: sale.hotmartProductId,
+          transactionId: sale.transactionId,
+          status: "approved",
+          priceCents: sale.priceCents,
+        });
+      }
+      hasApprovedPurchase = true;
+    }
+  }
+
+  if (!hasApprovedPurchase) {
     return { error: "noPurchase" };
   }
 

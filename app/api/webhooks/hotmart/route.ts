@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { upsertHotmartPurchase } from "@/lib/hotmart-sync";
 import { mapHotmartStatus, type HotmartWebhookPayload } from "@/lib/hotmart";
 
 /**
@@ -37,24 +38,14 @@ export async function POST(request: Request) {
 
   await supabase.from("customers").upsert({ email }, { onConflict: "email", ignoreDuplicates: true });
 
-  const { data: product } = await supabase
-    .from("products")
-    .select("id")
-    .eq("hotmart_product_id", hotmartProductId)
-    .maybeSingle();
-
-  const { error } = await supabase.from("purchases").upsert(
-    {
-      email,
-      product_id: product?.id ?? null,
-      hotmart_product_id: hotmartProductId,
-      hotmart_transaction_id: transactionId,
-      status,
-      price_paid_cents: typeof priceValue === "number" ? Math.round(priceValue * 100) : null,
-      raw_payload: payload,
-    },
-    { onConflict: "hotmart_transaction_id" },
-  );
+  const { error } = await upsertHotmartPurchase(supabase, {
+    email,
+    hotmartProductId,
+    transactionId,
+    status,
+    priceCents: typeof priceValue === "number" ? Math.round(priceValue * 100) : null,
+    rawPayload: payload,
+  });
 
   if (error) {
     console.error("[hotmart webhook] failed to store purchase", error);
