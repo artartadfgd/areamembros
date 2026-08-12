@@ -65,9 +65,8 @@ export async function saveProductAction(
     sort_order: Number.isFinite(sortOrder) ? sortOrder : 0,
   };
 
-  const supabase = createAdminClient();
-
   try {
+    const supabase = createAdminClient();
     const coverImage = formData.get("coverImage");
     if (coverImage && typeof coverImage !== "string" && coverImage.size > 0) {
       const extension = coverImage.name.split(".").pop() || "jpg";
@@ -91,6 +90,7 @@ export async function saveProductAction(
       return { error: error.message };
     }
   } catch (err) {
+    console.error("[saveProductAction] failed", err);
     return {
       error: err instanceof Error ? err.message : "Something went wrong saving the product.",
     };
@@ -103,8 +103,13 @@ export async function saveProductAction(
 export async function deleteProductAction(id: string) {
   if (!(await isAdmin())) return;
 
-  const supabase = createAdminClient();
-  await supabase.from("products").delete().eq("id", id);
+  try {
+    const supabase = createAdminClient();
+    await supabase.from("products").delete().eq("id", id);
+  } catch (err) {
+    console.error("[deleteProductAction] failed", err);
+    return;
+  }
 
   revalidatePath("/admin");
   redirect("/admin");
