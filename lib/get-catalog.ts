@@ -67,7 +67,7 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
     }
   }
 
-  return rows.map((row) => {
+  const catalog = rows.map((row) => {
     const product = mapProductRow(row);
     const isUnlocked =
       unlockedProductIds.has(product.id) ||
@@ -75,6 +75,10 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
         unlockedHotmartIds.has(product.hotmartProductId));
     return { ...product, isUnlocked };
   });
+
+  // Owned products first, so a customer immediately sees what they
+  // bought — locked ones still follow in their normal catalog order.
+  return catalog.sort((a, b) => Number(b.isUnlocked) - Number(a.isUnlocked));
 }
 
 export async function getCatalogProduct(slug: string): Promise<CatalogProduct | null> {
