@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { LogOut } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { ThemeToggle } from "./theme-toggle";
 import { LocaleSwitcher } from "./locale-switcher";
 import { siteConfig } from "@/lib/site-config";
 import { getSession } from "@/lib/session";
@@ -13,22 +12,22 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const session = await getSession();
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-bg/85 backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-border bg-bg/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
         <Link
           href="/"
           className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight text-ink"
         >
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-accent font-mono text-xs font-bold text-accent-ink">
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-sm font-bold text-accent-ink">
             {siteConfig.name.charAt(0)}
           </span>
           {siteConfig.name}
         </Link>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-3 sm:gap-4">
           {session ? (
             <div className="hidden items-center gap-3 sm:flex">
-              <span className="max-w-[14rem] truncate font-mono text-xs text-ink-muted">
+              <span className="max-w-[14rem] truncate text-sm text-ink-muted">
                 {t("loggedInAs", { email: session.email })}
               </span>
               <form action={logoutAction.bind(null, locale)}>
@@ -43,7 +42,6 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             </div>
           ) : null}
           <LocaleSwitcher />
-          <ThemeToggle />
         </div>
       </div>
     </header>

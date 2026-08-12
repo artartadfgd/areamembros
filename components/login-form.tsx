@@ -26,7 +26,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
         required
         placeholder={t("emailPlaceholder")}
         autoComplete="email"
-        className="rounded-md border border-border bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-1 focus:ring-accent"
+        className="rounded-full border border-border bg-surface px-5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent"
       />
 
       {state.error && (
@@ -44,7 +44,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-hover disabled:opacity-60"
+        className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover disabled:opacity-60"
       >
         {isPending ? t("submitPending") : t("submit")}
       </button>

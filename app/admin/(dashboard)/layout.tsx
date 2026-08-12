@@ -37,7 +37,7 @@ export default async function AdminDashboardLayout({
           <form action={adminLogoutAction}>
             <button
               type="submit"
-              className="font-mono text-xs text-ink-muted transition-colors hover:text-ink"
+              className="text-sm text-ink-muted transition-colors hover:text-ink"
             >
               Log out
             </button>

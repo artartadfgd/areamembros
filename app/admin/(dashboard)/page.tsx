@@ -7,9 +7,9 @@ export default async function AdminProductsPage() {
     return (
       <div className="rounded-xl border border-dashed border-border p-6 text-sm text-ink-muted">
         Supabase isn&apos;t configured yet — set{" "}
-        <code className="font-mono text-ink">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
-        <code className="font-mono text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and{" "}
-        <code className="font-mono text-ink">SUPABASE_SERVICE_ROLE_KEY</code> as environment
+        <code className="text-ink">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
+        <code className="text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and{" "}
+        <code className="text-ink">SUPABASE_SERVICE_ROLE_KEY</code> as environment
         variables before adding products here.
       </div>
     );
@@ -27,7 +27,7 @@ export default async function AdminProductsPage() {
         <h1 className="font-display text-2xl font-medium text-ink">Products</h1>
         <Link
           href="/admin/products/new"
-          className="inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-hover"
+          className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover"
         >
           Add product
         </Link>
@@ -40,7 +40,7 @@ export default async function AdminProductsPage() {
       )}
 
       {products && products.length > 0 && (
-        <ul className="divide-y divide-border overflow-hidden rounded-xl border border-border">
+        <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border">
           {products.map((product) => (
             <li key={product.id}>
               <Link
@@ -49,12 +49,12 @@ export default async function AdminProductsPage() {
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-ink">{product.title}</p>
-                  <p className="mt-0.5 font-mono text-xs text-ink-faint">
+                  <p className="mt-0.5 text-xs text-ink-faint">
                     {product.slug} · {product.type}
                     {!product.is_published && " · unpublished"}
                   </p>
                 </div>
-                <span className="shrink-0 font-mono text-sm text-ink-muted">
+                <span className="shrink-0 text-sm tabular-nums text-ink-muted">
                   {formatPrice(product.price_cents, product.currency)}
                 </span>
               </Link>

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Lock, X } from "lucide-react";
 import type { CatalogProduct } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
+import { PRODUCT_TYPE_COLOR } from "@/lib/product-type-colors";
 
 export function LockedProductModal({
   product,
@@ -18,6 +19,7 @@ export function LockedProductModal({
 }) {
   const t = useTranslations("ProductCard");
   const tType = useTranslations("ProductType");
+  const typeColor = PRODUCT_TYPE_COLOR[product.type];
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -37,7 +39,7 @@ export function LockedProductModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="locked-product-title"
-        className="relative w-full max-w-sm rounded-xl border border-border bg-surface p-6 shadow-2xl"
+        className="relative w-full max-w-sm rounded-2xl border border-border bg-surface p-6 shadow-2xl"
       >
         <button
           type="button"
@@ -48,14 +50,20 @@ export function LockedProductModal({
           <X className="h-4 w-4" strokeWidth={1.75} />
         </button>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-bg-subtle">
-          <Lock className="h-4 w-4 text-ink-muted" strokeWidth={1.5} />
+        <div
+          className="flex h-9 w-9 items-center justify-center rounded-full"
+          style={{ backgroundColor: typeColor.soft }}
+        >
+          <Lock className="h-4 w-4" style={{ color: typeColor.strong }} strokeWidth={1.5} />
         </div>
 
-        <span className="mt-4 block font-mono text-xs uppercase tracking-wide text-ink-faint">
+        <span
+          className="mt-4 inline-block rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide"
+          style={{ backgroundColor: typeColor.soft, color: typeColor.ink }}
+        >
           {tType(product.type)}
         </span>
-        <h2 id="locked-product-title" className="mt-1 font-display text-xl font-medium text-ink">
+        <h2 id="locked-product-title" className="mt-2 font-display text-xl font-medium text-ink">
           {product.title}
         </h2>
 
@@ -65,14 +73,14 @@ export function LockedProductModal({
         )}
 
         <div className="mt-5 flex items-center justify-between gap-3">
-          <span className="font-mono text-lg font-medium text-ink">
+          <span className="font-display text-lg font-semibold tabular-nums text-ink">
             {formatPrice(product.priceCents, product.currency, locale)}
           </span>
           <a
             href={product.checkoutUrl ?? "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-hover"
+            className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover"
           >
             {t("buyNow")}
           </a>

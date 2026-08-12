@@ -45,7 +45,7 @@ export default async function HomePage({
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
         <div className="max-w-2xl">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="text-sm font-bold uppercase tracking-[0.14em] text-accent">
             {t("eyebrow")}
           </p>
           <h1 className="mt-3 font-display text-4xl font-medium leading-tight text-ink text-balance sm:text-5xl">
@@ -57,8 +57,8 @@ export default async function HomePage({
         </div>
 
         {products.length > 0 && (
-          <div className="mt-10 flex items-center gap-2 font-mono text-xs text-ink-muted">
-            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+          <div className="mt-10 flex items-center gap-2 text-sm font-medium text-ink-muted">
+            <span className="inline-flex h-2 w-2 rounded-full bg-success" />
             {t("unlockedCount", { unlocked: unlockedCount, total: products.length })}
           </div>
         )}
@@ -79,7 +79,7 @@ export default async function HomePage({
         </div>
       </main>
 
-      <footer className="border-t border-border py-8 text-center font-mono text-xs text-ink-faint">
+      <footer className="border-t border-border bg-bg-subtle py-8 text-center text-sm text-ink-faint">
         {siteConfig.name} · {tFooter("tagline")}
       </footer>
     </div>

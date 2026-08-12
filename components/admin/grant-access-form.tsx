@@ -67,7 +67,7 @@ export function GrantAccessForm({ products }: { products: Product[] }) {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex w-fit items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-hover disabled:opacity-60"
+        className="inline-flex w-fit items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover disabled:opacity-60"
       >
         {isPending ? "Granting…" : "Grant access"}
       </button>

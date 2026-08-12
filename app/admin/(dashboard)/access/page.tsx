@@ -7,9 +7,9 @@ export default async function GrantAccessPage() {
     return (
       <div className="rounded-xl border border-dashed border-border p-6 text-sm text-ink-muted">
         Supabase isn&apos;t configured yet — set{" "}
-        <code className="font-mono text-ink">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
-        <code className="font-mono text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and{" "}
-        <code className="font-mono text-ink">SUPABASE_SERVICE_ROLE_KEY</code> as environment
+        <code className="text-ink">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
+        <code className="text-ink">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> and{" "}
+        <code className="text-ink">SUPABASE_SERVICE_ROLE_KEY</code> as environment
         variables before granting access here.
       </div>
     );

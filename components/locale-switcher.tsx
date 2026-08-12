@@ -40,7 +40,7 @@ export function LocaleSwitcher() {
             { locale: e.target.value },
           );
         }}
-        className="appearance-none rounded-md border border-border bg-transparent py-2 pl-8 pr-2.5 font-mono text-xs text-ink-muted transition-colors hover:border-border-strong hover:text-ink focus:outline-none focus:ring-1 focus:ring-accent"
+        className="appearance-none rounded-md border border-border bg-transparent py-2 pl-8 pr-2.5 text-sm font-medium text-ink-muted transition-colors hover:border-border-strong hover:text-ink focus:outline-none focus:ring-1 focus:ring-accent"
       >
         {routing.locales.map((l) => (
           <option key={l} value={l} className="bg-surface text-ink">
