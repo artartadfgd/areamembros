@@ -4,9 +4,10 @@ import { ArrowUpRight, CheckCircle2, FileText, Link as LinkIcon, Lock, PlayCircl
 import { Link } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { ProductCover } from "@/components/product-cover";
-import { mockCatalog } from "@/lib/mock-data";
+import { getCatalogProduct } from "@/lib/get-catalog";
 import { formatPrice } from "@/lib/format";
 import type { ContentItem } from "@/lib/types";
+import type { Locale } from "@/i18n/routing";
 
 const CONTENT_ICON: Record<ContentItem["type"], typeof PlayCircle> = {
   video: PlayCircle,
@@ -18,16 +19,14 @@ const CONTENT_ICON: Record<ContentItem["type"], typeof PlayCircle> = {
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ locale: string; slug: string }>;
+  params: Promise<{ locale: Locale; slug: string }>;
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("ProductPage");
   const tType = await getTranslations("ProductType");
 
-  // TODO(auth): replace with a real Supabase lookup + an approved
-  // purchase check for the current session's email.
-  const product = mockCatalog.find((p) => p.slug === slug);
+  const product = await getCatalogProduct(slug);
 
   if (!product) notFound();
 
@@ -35,7 +34,7 @@ export default async function ProductPage({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader />
+      <SiteHeader locale={locale} />
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-12 sm:px-8 sm:py-16">
         <Link href="/" className="text-sm font-medium text-ink-muted transition-colors hover:text-ink">

@@ -5,8 +5,8 @@ export default createMiddleware(routing);
 
 export const config = {
   matcher: [
-    // Todos os paths exceto os que começam com /api, /_next, /_vercel
-    // ou que contenham um ponto (arquivos estáticos como favicon.ico).
-    "/((?!api|_next|_vercel|.*\\..*).*)",
+    // All paths except /api, /admin (not localized — owner-only), /_next,
+    // /_vercel, or ones containing a dot (static files like favicon.ico).
+    "/((?!api|admin|_next|_vercel|.*\\..*).*)",
   ],
 };

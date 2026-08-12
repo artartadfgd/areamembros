@@ -2,24 +2,84 @@
 
 A digital products membership app. Payments happen on Hotmart; this app
 receives Hotmart's webhook, records who bought what (by email), and
-unlocks the matching content.
+unlocks the matching content. No passwords, no sign-up — a customer
+just types the email they bought with.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript
 - Tailwind CSS v4
 - next-intl (i18n — English default, Portuguese, Spanish)
-- Supabase (Postgres + Storage)
+- Supabase (Postgres) — data only, not Supabase Auth
 - Hotmart (checkout + purchase-approved webhook)
 
-## How login works (no password, no sign-up)
+## How it works
 
-There's no traditional Supabase Auth here. The user types the email they
-used to buy on Hotmart; the backend checks whether that email has an
-approved purchase on record (received via webhook) and, if so, creates
-the session. That check always happens server-side — never only in the
-front-end. The login route + webhook are still coming in the next step;
-for now the catalog uses mock data (`lib/mock-data.ts`).
+- **Catalog** (`/`): every published product, unlocked or not. Locked
+  cards open a popup with a short description and a "Buy now" link
+  instead of navigating away.
+- **Login** (`/login`): the customer types their purchase email. The
+  server checks for an approved purchase for that email and, if found,
+  sets a signed session cookie — no password, no account created by the
+  user (`lib/session.ts`, `app/[locale]/login/actions.ts`).
+- **Hotmart webhook** (`/api/webhooks/hotmart`): Hotmart calls this on
+  every purchase event. It's matched to a product by
+  `hotmart_product_id` and stored in `purchases`, keyed by the buyer's
+  email (`app/api/webhooks/hotmart/route.ts`).
+- **Admin panel** (`/admin`): a single password (`ADMIN_PASSWORD`) gates
+  a small dashboard to add/edit/delete products — this is how you enter
+  each product's price, description, Hotmart product ID, and checkout
+  link, without touching code.
+
+None of this needs Supabase Auth: "customers" are just email addresses
+that show up in `purchases`.
+
+## Go-live checklist
+
+1. **Create a Supabase project** (free tier is fine) at
+   [supabase.com](https://supabase.com).
+2. **Apply the schema**: in the Supabase dashboard, open the SQL editor
+   and run the contents of `supabase/migrations/0001_init.sql` (or use
+   the CLI: `supabase link --project-ref <ref> && supabase db push`).
+3. **Set environment variables** — copy `.env.example` to `.env.local`
+   for local dev, and add the same keys in Vercel (Project Settings →
+   Environment Variables):
+   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+     `SUPABASE_SERVICE_ROLE_KEY` — Supabase → Project Settings → API.
+   - `SESSION_SECRET` — any long random string, e.g.
+     `openssl rand -base64 32`.
+   - `ADMIN_PASSWORD` — the password for `/admin`. Pick something long;
+     there's no username, just this password.
+   - `HOTMART_WEBHOOK_TOKEN` — see step 5.
+   - Redeploy after adding these (Vercel only picks up env vars on a new
+     build).
+4. **Add your products** at `/admin` (log in with `ADMIN_PASSWORD`).
+   For each of the 5 products, you'll need from Hotmart: the product's
+   ID (Hotmart product page → it's in the URL/settings) and its
+   checkout link. Price, description and cover come from you — there's
+   no cover image upload yet, so covers stay as the generated icon
+   until that's added.
+5. **Configure the Hotmart webhook**: in Hotmart, per product (or
+   account-wide) → Webhook/Postback settings → set the URL to
+   `https://<your-domain>/api/webhooks/hotmart`, and copy the "Hottok"
+   value Hotmart shows you into `HOTMART_WEBHOOK_TOKEN`. Make sure the
+   `hotmart_product_id` you set in `/admin` for each product matches
+   the real Hotmart product ID exactly.
+6. **Test end to end**: make a real (or Hotmart sandbox) purchase →
+   confirm a row appears in `purchases` with `status = approved` →
+   go to `/login`, enter that email → the matching product should show
+   unlocked on the catalog.
+
+Until steps 1–3 are done, the site keeps running on mock data
+(`lib/mock-data.ts`) so the current Vercel deployment doesn't break —
+`getCatalog()` in `lib/get-catalog.ts` falls back to it automatically
+whenever Supabase env vars are missing.
+
+For a product whose content already lives in an app you built
+separately, set its **External app URL** in `/admin` instead of adding
+content items — the unlocked "Access"/"Open the app" button then just
+redirects there. There's no SSO between this app and that one; the
+customer logs into that app however it already handles login.
 
 ## Internationalization
 
@@ -28,9 +88,11 @@ no URL prefix (`/`, `/products/x`); other locales are prefixed
 (`/pt/produtos/x`, `/es/productos/x`) — see `i18n/routing.ts` for the
 locale list and localized pathnames, and `messages/*.json` for the UI
 copy. Adding a language means adding a locale to `i18n/routing.ts` and a
-matching `messages/<locale>.json` file. Mock product content itself is
-only in English for now — translating actual product catalog content is
-a separate, later concern from translating the UI chrome.
+matching `messages/<locale>.json` file. Product content itself (title,
+description) isn't translated — only the UI chrome is.
+
+The `/admin` panel is intentionally not localized (English only,
+owner-facing) and lives outside `app/[locale]/`.
 
 ## Running locally
 
@@ -41,40 +103,29 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Database
-
-The initial schema lives in `supabase/migrations/0001_init.sql`
-(`products`, `customers`, `purchases`). To apply it to a Supabase
-project:
-
-```bash
-supabase link --project-ref <your-project-ref>
-supabase db push
-```
-
-Copy `.env.example` to `.env.local` and fill it in with your Supabase
-project's credentials (Project Settings → API).
-
-For products whose content already lives in an existing app (yours or a
-third party's) rather than in `content`, set `products.external_url`.
-Once unlocked, the product page shows an "Open the app" button that
-redirects there instead of listing content — no SSO, just a link; the
-user logs into that app however it already handles login.
-
 ## Structure
 
 ```
 app/[locale]/
   page.tsx                     catalog — every product, locked or not
   products/[slug]/page.tsx     product detail + content (if unlocked)
-  login/page.tsx                placeholder for email login
-  layout.tsx                    root layout: fonts, theme, i18n provider
+  login/page.tsx, actions.ts   email-login page + Server Action
+  layout.tsx                    locale validation + i18n provider
+app/
+  layout.tsx                    true root layout: fonts, theme
+  admin/                         password-gated admin panel (not localized)
+  api/webhooks/hotmart/         Hotmart purchase webhook
 i18n/                           next-intl routing/navigation/request config
 messages/                       en.json (source of truth), pt.json, es.json
 components/                     ProductCard, header, locale switcher, theme, etc.
+components/admin/                admin panel form + delete button
 lib/
   types.ts                      types mirroring the database schema
-  mock-data.ts                  mock catalog for this stage
+  mock-data.ts                  mock catalog fallback (no Supabase configured)
+  get-catalog.ts                real catalog + unlock status from Supabase
+  session.ts                    signed cookies for customer + admin sessions
+  hotmart.ts                    Hotmart webhook payload/status mapping
+  actions/                      Server Actions (logout, admin auth, products)
   supabase/                     Supabase clients (browser, server, admin)
 supabase/migrations/            SQL schema
 ```

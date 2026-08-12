@@ -2,27 +2,26 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SiteHeader } from "@/components/site-header";
 import { ProductCard } from "@/components/product-card";
 import { EmptyState } from "@/components/empty-state";
-import { mockCatalog } from "@/lib/mock-data";
+import { getCatalog } from "@/lib/get-catalog";
 import { siteConfig } from "@/lib/site-config";
+import type { Locale } from "@/i18n/routing";
 
 export default async function CatalogPage({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Catalog");
   const tFooter = await getTranslations("Footer");
 
-  // TODO(auth): once email login exists, fetch the real catalog from
-  // Supabase already combined with this email's approved purchases.
-  const products = mockCatalog;
+  const products = await getCatalog();
   const unlockedCount = products.filter((p) => p.isUnlocked).length;
 
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader />
+      <SiteHeader locale={locale} />
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-5 pb-24 pt-12 sm:px-8 sm:pt-16">
         <div className="max-w-2xl">

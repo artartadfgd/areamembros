@@ -1,0 +1,53 @@
+"use server";
+
+import { redirect } from "@/i18n/navigation";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { createSession } from "@/lib/session";
+import type { Locale } from "@/i18n/routing";
+
+export type LoginState = {
+  error: "invalidEmail" | "noPurchase" | "unexpected" | null;
+};
+
+export async function loginAction(
+  locale: Locale,
+  _prevState: LoginState,
+  formData: FormData,
+): Promise<LoginState> {
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
+
+  if (!email || !email.includes("@")) {
+    return { error: "invalidEmail" };
+  }
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error("[login] Supabase isn't configured yet");
+    return { error: "unexpected" };
+  }
+
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from("purchases")
+    .select("id")
+    .eq("email", email)
+    .eq("status", "approved")
+    .limit(1);
+
+  if (error) {
+    console.error("[login] failed to check purchases", error);
+    return { error: "unexpected" };
+  }
+
+  if (!data || data.length === 0) {
+    return { error: "noPurchase" };
+  }
+
+  await supabase
+    .from("customers")
+    .upsert({ email, last_login_at: new Date().toISOString() }, { onConflict: "email" });
+
+  await createSession(email);
+  return redirect({ href: "/", locale });
+}

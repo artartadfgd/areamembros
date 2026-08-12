@@ -4,7 +4,9 @@
     "description": "Accede a los productos digitales que compraste y explora el resto del catálogo."
   },
   "Nav": {
-    "login": "¿Ya compraste? Inicia sesión"
+    "login": "¿Ya compraste? Inicia sesión",
+    "loggedInAs": "Sesión iniciada como {email}",
+    "logOut": "Cerrar sesión"
   },
   "Catalog": {
     "eyebrow": "Tu área de miembros",
@@ -18,7 +20,9 @@
     "unlocked": "Desbloqueado",
     "lockedContent": "Contenido bloqueado",
     "buyNow": "Comprar ahora",
-    "access": "Acceder"
+    "access": "Acceder",
+    "modalBody": "Todavía no compraste este producto — adquiérelo abajo para desbloquear el acceso al instante.",
+    "close": "Cerrar"
   },
   "ProductType": {
     "course": "Curso",
@@ -39,8 +43,15 @@
     "minutes": "{count} min"
   },
   "LoginPage": {
-    "title": "Inicio de sesión por email — próximamente",
-    "description": "En este paso vas a escribir el email que usaste para comprar en Hotmart. Si tiene una compra aprobada, entras al instante — sin contraseña ni registro. Esta parte todavía se está construyendo.",
+    "title": "Accede a tus productos",
+    "description": "Escribe el email que usaste para comprar en Hotmart. Si tiene una compra aprobada, entras — sin contraseña, sin registro.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "submit": "Continuar",
+    "submitPending": "Verificando…",
+    "errorInvalidEmail": "Escribe un email válido.",
+    "errorNoPurchase": "No encontramos una compra aprobada para este email.",
+    "errorUnexpected": "Algo salió mal. Intenta de nuevo.",
     "back": "Volver al catálogo"
   },
   "Footer": {

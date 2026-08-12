@@ -4,7 +4,9 @@
     "description": "Access the digital products you've purchased and browse the rest of the catalog."
   },
   "Nav": {
-    "login": "Already purchased? Log in"
+    "login": "Already purchased? Log in",
+    "loggedInAs": "Signed in as {email}",
+    "logOut": "Log out"
   },
   "Catalog": {
     "eyebrow": "Your member area",
@@ -18,7 +20,9 @@
     "unlocked": "Unlocked",
     "lockedContent": "Locked content",
     "buyNow": "Buy now",
-    "access": "Access"
+    "access": "Access",
+    "modalBody": "You haven't purchased this product yet — grab it below to unlock instant access.",
+    "close": "Close"
   },
   "ProductType": {
     "course": "Course",
@@ -39,8 +43,15 @@
     "minutes": "{count} min"
   },
   "LoginPage": {
-    "title": "Email login — coming soon",
-    "description": "In this step you'll type the email you used to purchase on Hotmart. If it has an approved purchase, you're in instantly — no password, no sign-up. This part is still being built.",
+    "title": "Access your products",
+    "description": "Enter the email you used to buy on Hotmart. If it has an approved purchase, you're in — no password, no sign-up.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Continue",
+    "submitPending": "Checking…",
+    "errorInvalidEmail": "Enter a valid email address.",
+    "errorNoPurchase": "We couldn't find an approved purchase for this email.",
+    "errorUnexpected": "Something went wrong. Please try again.",
     "back": "Back to catalog"
   },
   "Footer": {
