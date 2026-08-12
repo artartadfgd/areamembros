@@ -67,27 +67,33 @@ export async function saveProductAction(
 
   const supabase = createAdminClient();
 
-  const coverImage = formData.get("coverImage");
-  if (coverImage instanceof File && coverImage.size > 0) {
-    const extension = coverImage.name.split(".").pop() || "jpg";
-    const path = `${slug}-${Date.now()}.${extension}`;
-    const { error: uploadError } = await supabase.storage
-      .from("product-covers")
-      .upload(path, coverImage, { contentType: coverImage.type, upsert: true });
+  try {
+    const coverImage = formData.get("coverImage");
+    if (coverImage && typeof coverImage !== "string" && coverImage.size > 0) {
+      const extension = coverImage.name.split(".").pop() || "jpg";
+      const path = `${slug}-${Date.now()}.${extension}`;
+      const { error: uploadError } = await supabase.storage
+        .from("product-covers")
+        .upload(path, coverImage, { contentType: coverImage.type, upsert: true });
 
-    if (uploadError) {
-      return { error: `Cover photo upload failed: ${uploadError.message}` };
+      if (uploadError) {
+        return { error: `Cover photo upload failed: ${uploadError.message}` };
+      }
+
+      row.cover_url = supabase.storage.from("product-covers").getPublicUrl(path).data.publicUrl;
     }
 
-    row.cover_url = supabase.storage.from("product-covers").getPublicUrl(path).data.publicUrl;
-  }
+    const { error } = id
+      ? await supabase.from("products").update(row).eq("id", id)
+      : await supabase.from("products").insert(row);
 
-  const { error } = id
-    ? await supabase.from("products").update(row).eq("id", id)
-    : await supabase.from("products").insert(row);
-
-  if (error) {
-    return { error: error.message };
+    if (error) {
+      return { error: error.message };
+    }
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong saving the product.",
+    };
   }
 
   revalidatePath("/admin");
