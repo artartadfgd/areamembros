@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/* Ativa a variante `dark:` do Tailwind por classe (next-themes injeta
+   `class="dark"` na tag <html>), em vez de só prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Identidade visual — "Acervo"
+  Paleta editorial quente (creme + tinta + terracota), fugindo do
+  azul/roxo padrão de produtos de IA. Terracota é a cor de ação
+  (comprar, links); verde-musgo marca o que já foi liberado.
+*/
+:root {
+  --color-bg: #faf5ec;
+  --color-bg-subtle: #f2ead9;
+  --color-surface: #fffdf8;
+  --color-surface-hover: #fff9ee;
+  --color-border: #e7dfcb;
+  --color-border-strong: #d8cbac;
+
+  --color-ink: #241d14;
+  --color-ink-muted: #6c614f;
+  --color-ink-faint: #9c8f78;
+
+  --color-accent: #bf5730;
+  --color-accent-hover: #a54826;
+  --color-accent-ink: #fff6ec;
+  --color-accent-soft: #f3e0d1;
+
+  --color-success: #3f6e52;
+  --color-success-soft: #dfe9de;
+  --color-success-ink: #24402f;
+
+  --color-overlay: 22 17 10;
+
+  --shadow-color: 36 26 12;
+}
+
+.dark {
+  --color-bg: #161109;
+  --color-bg-subtle: #1d160d;
+  --color-surface: #211a10;
+  --color-surface-hover: #271f14;
+  --color-border: #362a19;
+  --color-border-strong: #493823;
+
+  --color-ink: #f4ecdd;
+  --color-ink-muted: #b9a98d;
+  --color-ink-faint: #86775f;
+
+  --color-accent: #e07a45;
+  --color-accent-hover: #ee8c58;
+  --color-accent-ink: #201205;
+  --color-accent-soft: #3a2618;
+
+  --color-success: #7fb28f;
+  --color-success-soft: #223228;
+  --color-success-ink: #d9ecdd;
+
+  --color-overlay: 8 6 3;
+
+  --shadow-color: 0 0 0;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-bg-subtle: var(--color-bg-subtle);
+  --color-surface: var(--color-surface);
+  --color-surface-hover: var(--color-surface-hover);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-faint: var(--color-ink-faint);
+
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-ink: var(--color-accent-ink);
+  --color-accent-soft: var(--color-accent-soft);
+
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+  --color-success-ink: var(--color-success-ink);
+
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-manrope);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.overlay-scrim {
+  background-color: rgb(var(--color-overlay) / 0.55);
+}
