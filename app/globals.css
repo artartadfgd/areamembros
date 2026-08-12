@@ -5,61 +5,65 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
-  Identidade visual — "Acervo"
-  Paleta editorial quente (creme + tinta + terracota), fugindo do
-  azul/roxo padrão de produtos de IA. Terracota é a cor de ação
-  (comprar, links); verde-musgo marca o que já foi liberado.
+  Identidade visual — "Cache"
+  Estética tech/dark-first: preto quase puro + verde-limão elétrico
+  como único acento, tipografia grotesk + monoespaçada para reforçar o
+  caráter "engineered". Deliberadamente longe do azul/roxo genérico de
+  IA — o acento é um verde ácido que lembra terminal/circuito, usado
+  com moderação.
 */
 :root {
-  --color-bg: #faf5ec;
-  --color-bg-subtle: #f2ead9;
-  --color-surface: #fffdf8;
-  --color-surface-hover: #fff9ee;
-  --color-border: #e7dfcb;
-  --color-border-strong: #d8cbac;
+  --color-bg: #f5f5f2;
+  --color-bg-subtle: #ececE7;
+  --color-surface: #ffffff;
+  --color-surface-hover: #fbfbf9;
+  --color-border: #e0e0da;
+  --color-border-strong: #c9c9c0;
 
-  --color-ink: #241d14;
-  --color-ink-muted: #6c614f;
-  --color-ink-faint: #9c8f78;
+  --color-ink: #0d0d0e;
+  --color-ink-muted: #63636b;
+  --color-ink-faint: #97979e;
 
-  --color-accent: #bf5730;
-  --color-accent-hover: #a54826;
-  --color-accent-ink: #fff6ec;
-  --color-accent-soft: #f3e0d1;
+  --color-accent: #5c8a11;
+  --color-accent-hover: #4c740d;
+  --color-accent-ink: #f7ffe8;
+  --color-accent-soft: #e4efd1;
 
-  --color-success: #3f6e52;
-  --color-success-soft: #dfe9de;
-  --color-success-ink: #24402f;
+  --color-success: #1f7a52;
+  --color-success-soft: #dcefe3;
+  --color-success-ink: #145237;
 
-  --color-overlay: 22 17 10;
+  --color-overlay: 10 10 11;
+  --shadow-color: 20 20 18;
 
-  --shadow-color: 36 26 12;
+  --grid-line: 0 0 0 / 0.05;
 }
 
 .dark {
-  --color-bg: #161109;
-  --color-bg-subtle: #1d160d;
-  --color-surface: #211a10;
-  --color-surface-hover: #271f14;
-  --color-border: #362a19;
-  --color-border-strong: #493823;
+  --color-bg: #0a0a0b;
+  --color-bg-subtle: #0f0f11;
+  --color-surface: #141416;
+  --color-surface-hover: #1a1a1d;
+  --color-border: #232326;
+  --color-border-strong: #323236;
 
-  --color-ink: #f4ecdd;
-  --color-ink-muted: #b9a98d;
-  --color-ink-faint: #86775f;
+  --color-ink: #f2f2ef;
+  --color-ink-muted: #96969e;
+  --color-ink-faint: #5c5c63;
 
-  --color-accent: #e07a45;
-  --color-accent-hover: #ee8c58;
-  --color-accent-ink: #201205;
-  --color-accent-soft: #3a2618;
+  --color-accent: #c6ff4d;
+  --color-accent-hover: #d6ff70;
+  --color-accent-ink: #0b1400;
+  --color-accent-soft: #1c260a;
 
-  --color-success: #7fb28f;
-  --color-success-soft: #223228;
-  --color-success-ink: #d9ecdd;
+  --color-success: #3ed598;
+  --color-success-soft: #10241a;
+  --color-success-ink: #7cf0be;
 
-  --color-overlay: 8 6 3;
-
+  --color-overlay: 4 4 5;
   --shadow-color: 0 0 0;
+
+  --grid-line: 255 255 255 / 0.05;
 }
 
 @theme inline {
@@ -83,8 +87,9 @@
   --color-success-soft: var(--color-success-soft);
   --color-success-ink: var(--color-success-ink);
 
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-space-grotesk);
   --font-body: var(--font-manrope);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 * {
@@ -106,12 +111,16 @@ body {
 }
 
 ::selection {
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 .font-display {
   font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }
 
 .text-balance {
@@ -133,5 +142,19 @@ body {
 }
 
 .overlay-scrim {
-  background-color: rgb(var(--color-overlay) / 0.55);
+  background-color: rgb(var(--color-overlay) / 0.6);
+}
+
+/* Textura de grid sutil usada no hero e nas capas dos produtos —
+   reforça o caráter "técnico" sem depender de imagens. */
+.grid-texture {
+  background-image:
+    linear-gradient(to right, rgb(var(--grid-line)) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--grid-line)) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.glow-accent {
+  box-shadow: 0 0 0 1px rgb(var(--color-overlay) / 0.02),
+    0 0 24px 0 color-mix(in srgb, var(--color-accent) 35%, transparent);
 }

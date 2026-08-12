@@ -43,7 +43,7 @@ create table if not exists products (
   description text not null default '',
   cover_url text,
   price_cents integer not null default 0,
-  currency text not null default 'BRL',
+  currency text not null default 'USD',
   type product_type not null default 'course',
 
   -- id do produto na Hotmart, usado para casar as compras recebidas
@@ -55,6 +55,11 @@ create table if not exists products (
 
   -- amostra grátis opcional (ex.: vídeo de preview, capítulo de cortesia)
   preview_url text,
+
+  -- quando preenchido, o conteúdo deste produto já vive em outro app seu
+  -- (ou de terceiros): o botão de acesso só redireciona pra cá em vez de
+  -- listar os itens de `content` abaixo.
+  external_url text,
 
   -- conteúdo liberado após a compra: lista de itens (vídeo, pdf, link, etc.)
   -- formato: [{ "type": "video", "title": "Aula 1", "url": "...", "duration_minutes": 12 }, ...]

@@ -1,21 +1,13 @@
 import { BookOpen, FileText, Package, PlayCircle, Sparkles } from "lucide-react";
 import type { ProductType } from "@/lib/types";
+import { cn } from "@/lib/cn";
 
 /**
- * Como ainda não temos capas reais enviadas pelo admin, geramos uma
- * capa "de identidade" com gradiente + ícone do tipo de produto — tudo
- * dentro da família de cores da marca (nada de azul/roxo aleatório).
- * Quando `coverUrl` existir, o ProductCard usa a imagem real no lugar.
+ * We don't have real cover images yet, so we generate an on-brand
+ * "tech" cover: a dark panel with a faint grid texture and a glowing
+ * outline icon for the product type. Once `coverUrl` exists, the
+ * ProductCard swaps this out for the real image.
  */
-const GRADIENTS: [string, string][] = [
-  ["#bf5730", "#7a3420"],
-  ["#c98a3e", "#8a5a1f"],
-  ["#8f6a4a", "#4b3524"],
-  ["#5c6b4c", "#2f3a26"],
-  ["#a8563f", "#5c2a1c"],
-  ["#7a5240", "#3a271d"],
-];
-
 const ICONS: Record<ProductType, typeof BookOpen> = {
   course: BookOpen,
   video: PlayCircle,
@@ -24,35 +16,25 @@ const ICONS: Record<ProductType, typeof BookOpen> = {
   other: Sparkles,
 };
 
-function hashToIndex(input: string, mod: number) {
-  let hash = 0;
-  for (let i = 0; i < input.length; i++) {
-    hash = (hash * 31 + input.charCodeAt(i)) >>> 0;
-  }
-  return hash % mod;
-}
-
 export function ProductCover({
-  slug,
   type,
   className,
 }: {
-  slug: string;
   type: ProductType;
   className?: string;
 }) {
-  const [from, to] = GRADIENTS[hashToIndex(slug, GRADIENTS.length)];
   const Icon = ICONS[type];
 
   return (
     <div
-      className={className}
-      style={{
-        background: `linear-gradient(155deg, ${from}, ${to})`,
-      }}
+      className={cn(
+        "grid-texture relative flex items-center justify-center bg-bg-subtle",
+        className,
+      )}
     >
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg/60" />
       <Icon
-        className="h-10 w-10 text-white/25"
+        className="relative h-9 w-9 text-accent drop-shadow-[0_0_18px_var(--color-accent)]"
         strokeWidth={1.25}
         aria-hidden
       />

@@ -1,0 +1,52 @@
+{
+  "Metadata": {
+    "title": "Cache — área de miembros",
+    "description": "Accede a los productos digitales que compraste y explora el resto del catálogo."
+  },
+  "Nav": {
+    "login": "¿Ya compraste? Inicia sesión"
+  },
+  "Catalog": {
+    "eyebrow": "Tu área de miembros",
+    "title": "Todo lo que compraste, en un solo lugar.",
+    "subtitle": "Los productos que ya compraste están desbloqueados abajo. El resto sigue visible — compra cuando quieras, sin salir de tu cuenta.",
+    "unlockedCount": "{unlocked} de {total} productos desbloqueados para ti",
+    "emptyTitle": "Todavía no hay productos",
+    "emptyDescription": "En cuanto se publiquen nuevos productos, aparecerán aquí automáticamente."
+  },
+  "ProductCard": {
+    "unlocked": "Desbloqueado",
+    "lockedContent": "Contenido bloqueado",
+    "buyNow": "Comprar ahora",
+    "access": "Acceder"
+  },
+  "ProductType": {
+    "course": "Curso",
+    "video": "Video",
+    "ebook": "E-book",
+    "file_bundle": "Paquete de archivos",
+    "other": "Contenido"
+  },
+  "ProductPage": {
+    "back": "Volver al catálogo",
+    "youHaveAccess": "Ya tienes acceso",
+    "openApp": "Abrir la app",
+    "buyNow": "Comprar ahora",
+    "viewFreeSample": "Ver muestra gratis",
+    "contentTitle": "Contenido",
+    "contentEmpty": "El contenido de este producto estará disponible pronto.",
+    "contentLocked": "El contenido completo se desbloquea automáticamente al confirmarse tu compra.",
+    "minutes": "{count} min"
+  },
+  "LoginPage": {
+    "title": "Inicio de sesión por email — próximamente",
+    "description": "En este paso vas a escribir el email que usaste para comprar en Hotmart. Si tiene una compra aprobada, entras al instante — sin contraseña ni registro. Esta parte todavía se está construyendo.",
+    "back": "Volver al catálogo"
+  },
+  "Footer": {
+    "tagline": "área de miembros"
+  },
+  "LocaleSwitcher": {
+    "label": "Idioma"
+  }
+}

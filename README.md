@@ -1,60 +1,80 @@
-# Acervo — área de membros
+# Cache — member area
 
-App de entrega de produtos digitais. Os pagamentos acontecem na Hotmart;
-este app recebe o webhook da Hotmart, guarda quem comprou o quê (por
-e-mail) e libera o acesso ao conteúdo.
+A digital products membership app. Payments happen on Hotmart; this app
+receives Hotmart's webhook, records who bought what (by email), and
+unlocks the matching content.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript
 - Tailwind CSS v4
+- next-intl (i18n — English default, Portuguese, Spanish)
 - Supabase (Postgres + Storage)
-- Hotmart (checkout + webhook de compra aprovada)
+- Hotmart (checkout + purchase-approved webhook)
 
-## Como entrar funciona (sem senha, sem cadastro)
+## How login works (no password, no sign-up)
 
-Não existe Supabase Auth tradicional aqui. O usuário digita o e-mail que
-usou na compra da Hotmart; o backend confere se aquele e-mail tem uma
-compra aprovada registrada (recebida via webhook) e, se tiver, cria a
-sessão. Essa verificação é sempre feita no servidor — nunca só no
-front-end. Essa parte (rota de login + webhook) ainda será implementada
-na próxima etapa; por enquanto o catálogo usa dados mockados
-(`lib/mock-data.ts`).
+There's no traditional Supabase Auth here. The user types the email they
+used to buy on Hotmart; the backend checks whether that email has an
+approved purchase on record (received via webhook) and, if so, creates
+the session. That check always happens server-side — never only in the
+front-end. The login route + webhook are still coming in the next step;
+for now the catalog uses mock data (`lib/mock-data.ts`).
 
-## Rodando localmente
+## Internationalization
+
+Routes live under `app/[locale]/`. English (`en`) is the default and has
+no URL prefix (`/`, `/products/x`); other locales are prefixed
+(`/pt/produtos/x`, `/es/productos/x`) — see `i18n/routing.ts` for the
+locale list and localized pathnames, and `messages/*.json` for the UI
+copy. Adding a language means adding a locale to `i18n/routing.ts` and a
+matching `messages/<locale>.json` file. Mock product content itself is
+only in English for now — translating actual product catalog content is
+a separate, later concern from translating the UI chrome.
+
+## Running locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
-## Banco de dados
+## Database
 
-O schema inicial está em `supabase/migrations/0001_init.sql`
-(`products`, `customers`, `purchases`). Para aplicar num projeto
-Supabase:
+The initial schema lives in `supabase/migrations/0001_init.sql`
+(`products`, `customers`, `purchases`). To apply it to a Supabase
+project:
 
 ```bash
-supabase link --project-ref <seu-project-ref>
+supabase link --project-ref <your-project-ref>
 supabase db push
 ```
 
-Copie `.env.example` para `.env.local` e preencha com as credenciais do
-seu projeto Supabase (Project Settings → API).
+Copy `.env.example` to `.env.local` and fill it in with your Supabase
+project's credentials (Project Settings → API).
 
-## Estrutura
+For products whose content already lives in an existing app (yours or a
+third party's) rather than in `content`, set `products.external_url`.
+Once unlocked, the product page shows an "Open the app" button that
+redirects there instead of listing content — no SSO, just a link; the
+user logs into that app however it already handles login.
+
+## Structure
 
 ```
-app/
-  page.tsx                 vitrine (catálogo) — todos os produtos, bloqueados ou não
-  produtos/[slug]/page.tsx detalhe do produto + conteúdo (se liberado)
-  entrar/page.tsx          placeholder do login por e-mail
-components/                ProductCard, header, tema, etc.
+app/[locale]/
+  page.tsx                     catalog — every product, locked or not
+  products/[slug]/page.tsx     product detail + content (if unlocked)
+  login/page.tsx                placeholder for email login
+  layout.tsx                    root layout: fonts, theme, i18n provider
+i18n/                           next-intl routing/navigation/request config
+messages/                       en.json (source of truth), pt.json, es.json
+components/                     ProductCard, header, locale switcher, theme, etc.
 lib/
-  types.ts                 tipos espelhando o schema do banco
-  mock-data.ts             catálogo mockado para esta primeira etapa
-  supabase/                clientes Supabase (browser, server, admin)
-supabase/migrations/       schema SQL
+  types.ts                      types mirroring the database schema
+  mock-data.ts                  mock catalog for this stage
+  supabase/                     Supabase clients (browser, server, admin)
+supabase/migrations/            SQL schema
 ```

@@ -1,0 +1,52 @@
+{
+  "Metadata": {
+    "title": "Cache — member area",
+    "description": "Access the digital products you've purchased and browse the rest of the catalog."
+  },
+  "Nav": {
+    "login": "Already purchased? Log in"
+  },
+  "Catalog": {
+    "eyebrow": "Your member area",
+    "title": "Every product you own, in one place.",
+    "subtitle": "Products you've already purchased are unlocked below. The rest stay visible too — buy anytime without leaving your account.",
+    "unlockedCount": "{unlocked} of {total} products unlocked for you",
+    "emptyTitle": "No products yet",
+    "emptyDescription": "Once new products are published, they'll show up here automatically."
+  },
+  "ProductCard": {
+    "unlocked": "Unlocked",
+    "lockedContent": "Locked content",
+    "buyNow": "Buy now",
+    "access": "Access"
+  },
+  "ProductType": {
+    "course": "Course",
+    "video": "Video",
+    "ebook": "E-book",
+    "file_bundle": "File bundle",
+    "other": "Content"
+  },
+  "ProductPage": {
+    "back": "Back to catalog",
+    "youHaveAccess": "You already have access",
+    "openApp": "Open the app",
+    "buyNow": "Buy now",
+    "viewFreeSample": "View free sample",
+    "contentTitle": "Content",
+    "contentEmpty": "Content for this product is coming soon.",
+    "contentLocked": "Full content unlocks automatically once your purchase is confirmed.",
+    "minutes": "{count} min"
+  },
+  "LoginPage": {
+    "title": "Email login — coming soon",
+    "description": "In this step you'll type the email you used to purchase on Hotmart. If it has an approved purchase, you're in instantly — no password, no sign-up. This part is still being built.",
+    "back": "Back to catalog"
+  },
+  "Footer": {
+    "tagline": "member area"
+  },
+  "LocaleSwitcher": {
+    "label": "Language"
+  }
+}

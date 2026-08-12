@@ -28,6 +28,9 @@ export type Product = {
   hotmartProductId: string | null;
   checkoutUrl: string | null;
   previewUrl: string | null;
+  /** When set, this product's content lives in an existing external app —
+   *  unlocking it just redirects here instead of listing content below. */
+  externalUrl: string | null;
   content: ContentItem[];
   isPublished: boolean;
   sortOrder: number;
@@ -44,12 +47,4 @@ export type Purchase = {
 /** Produto do catálogo já combinado com o status de compra do usuário atual. */
 export type CatalogProduct = Product & {
   isUnlocked: boolean;
-};
-
-export const PRODUCT_TYPE_LABEL: Record<ProductType, string> = {
-  course: "Curso",
-  video: "Vídeo",
-  ebook: "E-book",
-  file_bundle: "Pacote de arquivos",
-  other: "Conteúdo",
 };
