@@ -21,7 +21,11 @@ export default async function AdminAnalyticsPage() {
 
   const supabase = createAdminClient();
 
-  const [{ data: products }, { data: counts }, { data: recentEvents }] = await Promise.all([
+  const [
+    { data: products, error: productsError },
+    { data: counts, error: countsError },
+    { data: recentEvents, error: recentError },
+  ] = await Promise.all([
     supabase.from("products").select("id, title").order("sort_order", { ascending: true }),
     supabase.from("product_event_counts").select("*"),
     supabase
@@ -30,6 +34,23 @@ export default async function AdminAnalyticsPage() {
       .order("created_at", { ascending: false })
       .limit(50),
   ]);
+
+  const loadError = productsError ?? countsError ?? recentError;
+  if (loadError) {
+    return (
+      <div className="rounded-xl border border-dashed border-border p-6 text-sm text-ink-muted">
+        Failed to load analytics: <span className="text-ink">{loadError.message}</span>.
+        {(countsError || recentError) && (
+          <>
+            {" "}
+            This usually means migration{" "}
+            <code className="text-ink">0003_product_events.sql</code> hasn&apos;t been run
+            yet in the Supabase SQL editor.
+          </>
+        )}
+      </div>
+    );
+  }
 
   const statsByProduct = new Map<string, { views: number; clicks: number }>();
   for (const row of (counts ?? []) as EventCountRow[]) {
