@@ -7,6 +7,7 @@ import { Lock, X } from "lucide-react";
 import type { CatalogProduct } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 import { PRODUCT_TYPE_COLOR } from "@/lib/product-type-colors";
+import { trackProductEvent } from "@/lib/track-client";
 
 export function LockedProductModal({
   product,
@@ -28,6 +29,10 @@ export function LockedProductModal({
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
+
+  useEffect(() => {
+    trackProductEvent(product.id, "view");
+  }, [product.id]);
 
   if (typeof document === "undefined") return null;
 
@@ -80,6 +85,7 @@ export function LockedProductModal({
             href={product.checkoutUrl ?? "#"}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackProductEvent(product.id, "checkout_click")}
             className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover"
           >
             {t("buyNow")}

@@ -7,6 +7,7 @@ import { Sparkles, X } from "lucide-react";
 import type { CatalogProduct } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 import { PRODUCT_TYPE_COLOR } from "@/lib/product-type-colors";
+import { trackProductEvent } from "@/lib/track-client";
 
 /** Self-contained: renders itself open and just disappears when
  * dismissed. The parent only decides *whether* to mount it (there's no
@@ -93,6 +94,7 @@ export function WelcomeOfferModal({
               href={product.checkoutUrl ?? "#"}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackProductEvent(product.id, "checkout_click")}
               className="inline-flex items-center justify-center rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover"
             >
               {t("buyNow")}

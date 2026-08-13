@@ -33,6 +33,11 @@ just types the email they bought with.
   a small dashboard to add/edit/delete products — this is how you enter
   each product's price, description, Hotmart product ID, and checkout
   link, without touching code.
+- **Analytics** (`/admin/analytics`): per-product view/checkout-click
+  counts plus a recent-activity feed (who looked at what, who clicked
+  "Buy now", and when). Events are recorded by `/api/track` whenever a
+  signed-in customer opens a product page, opens the locked-product
+  popup, or clicks a checkout link.
 
 None of this needs Supabase Auth: "customers" are just email addresses
 that show up in `purchases`.
@@ -44,8 +49,8 @@ that show up in `purchases`.
 2. **Apply the schema**: in the Supabase dashboard, open the SQL editor
    and run the contents of `supabase/migrations/0001_init.sql`, then
    `0002_storage.sql` (creates the public `product-covers` bucket used
-   for cover photos) — or use the CLI:
-   `supabase link --project-ref <ref> && supabase db push`.
+   for cover photos), then `0003_product_events.sql` (analytics) — or
+   use the CLI: `supabase link --project-ref <ref> && supabase db push`.
 3. **Set environment variables** — copy `.env.example` to `.env.local`
    for local dev, and add the same keys in Vercel (Project Settings →
    Environment Variables):
@@ -135,6 +140,7 @@ app/
   layout.tsx                    true root layout: fonts, theme
   admin/                         password-gated admin panel (not localized)
   api/webhooks/hotmart/         Hotmart purchase webhook
+  api/track/                     records catalog view/checkout-click events
 i18n/                           next-intl routing/navigation/request config
 messages/                       en.json (source of truth), pt.json, es.json
 components/                     ProductCard, header, locale switcher, theme, etc.
@@ -149,7 +155,8 @@ lib/
   hotmart.ts                    Hotmart webhook payload/status mapping
   hotmart-api.ts                 live Hotmart Sales API fallback for login
   hotmart-sync.ts                shared purchase-upsert logic (webhook + login fallback)
+  track-client.ts                fire-and-forget analytics event helper (browser)
   actions/                      Server Actions (login, logout, admin auth, products)
   supabase/                     Supabase clients (browser, server, admin)
-supabase/migrations/            SQL schema (0001 tables, 0002 storage bucket)
+supabase/migrations/            SQL schema (0001 tables, 0002 storage bucket, 0003 analytics)
 ```

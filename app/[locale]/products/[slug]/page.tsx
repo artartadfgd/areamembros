@@ -4,6 +4,8 @@ import { ArrowUpRight, CheckCircle2, FileText, Link as LinkIcon, Lock, PlayCircl
 import { Link, redirect } from "@/i18n/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { ProductCover } from "@/components/product-cover";
+import { TrackView } from "@/components/track-view";
+import { TrackedCheckoutLink } from "@/components/tracked-checkout-link";
 import { getCatalogProduct } from "@/lib/get-catalog";
 import { getSession } from "@/lib/session";
 import { formatPrice } from "@/lib/format";
@@ -42,6 +44,7 @@ export default async function ProductPage({
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader locale={locale} />
+      <TrackView productId={product.id} />
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-12 sm:px-8 sm:py-16">
         <Link href="/" className="text-sm font-medium text-ink-muted transition-colors hover:text-ink">
@@ -97,14 +100,13 @@ export default async function ProductPage({
               </>
             ) : (
               <>
-                <a
+                <TrackedCheckoutLink
+                  productId={product.id}
                   href={product.checkoutUrl ?? "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-ink transition-colors hover:bg-accent-hover"
                 >
                   {t("buyNow")}
-                </a>
+                </TrackedCheckoutLink>
                 {product.previewUrl && (
                   <a
                     href={product.previewUrl}

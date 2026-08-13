@@ -32,6 +32,12 @@ export default async function AdminDashboardLayout({
               >
                 Grant access
               </Link>
+              <Link
+                href="/admin/analytics"
+                className="text-sm text-ink-muted transition-colors hover:text-ink"
+              >
+                Analytics
+              </Link>
             </nav>
           </div>
           <form action={adminLogoutAction}>
