@@ -24,9 +24,14 @@ type HotmartSaleItem = {
   product?: { id?: number | string };
   purchase?: {
     transaction?: string;
+    status?: string;
     price?: { value?: number };
   };
 };
+
+// Statuses that represent a real, paid-for purchase — anything else
+// (refunded, canceled, chargeback, still-processing, ...) doesn't unlock.
+const ACCEPTED_STATUSES = new Set(["APPROVED", "COMPLETE"]);
 
 type HotmartSalesHistoryResponse = {
   items?: HotmartSaleItem[];
@@ -82,20 +87,31 @@ export async function fetchApprovedHotmartPurchases(email: string): Promise<Live
 
   const url = new URL(SALES_HISTORY_URL);
   url.searchParams.set("buyer_email", email);
-  url.searchParams.set("transaction_status", "APPROVED");
 
   const response = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   if (!response.ok) {
-    console.error("[hotmart api] sales history request failed", response.status, await response.text());
+    console.error(
+      "[hotmart api] sales history request failed",
+      response.status,
+      await response.text(),
+      "url:",
+      url.toString(),
+    );
     return [];
   }
 
   const data = (await response.json()) as HotmartSalesHistoryResponse;
   return (data.items ?? [])
-    .filter((item) => item.product?.id != null && item.purchase?.transaction)
+    .filter(
+      (item) =>
+        item.product?.id != null &&
+        item.purchase?.transaction &&
+        item.purchase.status != null &&
+        ACCEPTED_STATUSES.has(item.purchase.status.toUpperCase()),
+    )
     .map((item) => ({
       hotmartProductId: String(item.product!.id),
       transactionId: item.purchase!.transaction!,
