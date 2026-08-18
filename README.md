@@ -19,7 +19,10 @@ just types the email they bought with.
   nothing else is visible until the customer enters the email they
   bought with. The server checks for an approved purchase for that
   email and, if found, sets a signed session cookie — no password, no
-  account creation (`lib/session.ts`, `lib/actions/login.ts`).
+  account creation (`lib/session.ts`, `lib/actions/login.ts`). Setting
+  `ALLOW_ANY_EMAIL_LOGIN=true` skips that purchase check entirely — any
+  email gets in (products still only unlock for emails with a real
+  purchase). It's a temporary escape hatch, not meant to stay on.
 - **Catalog** (also `/`, once signed in): every published product,
   unlocked or not. Locked cards open a popup with a short description
   and a "Buy now" link instead of navigating away. Product detail pages

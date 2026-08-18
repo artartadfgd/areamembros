@@ -30,36 +30,47 @@ export async function loginAction(
   }
 
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("purchases")
-    .select("id")
-    .eq("email", email)
-    .eq("status", "approved")
-    .limit(1);
 
-  if (error) {
-    console.error("[login] failed to check purchases", error);
-    return { error: "unexpected" };
-  }
+  // Temporary override: while ALLOW_ANY_EMAIL_LOGIN=true, any email gets
+  // in — no purchase check at all. Products still only unlock for emails
+  // with a real purchase; this only removes the login gate itself. Meant
+  // to be turned off (unset the env var, redeploy) once Hotmart is fully
+  // wired up.
+  const allowAnyEmail = process.env.ALLOW_ANY_EMAIL_LOGIN === "true";
+  let hasApprovedPurchase = allowAnyEmail;
 
-  let hasApprovedPurchase = Boolean(data && data.length > 0);
-
-  // No local record — ask Hotmart directly before giving up. Covers
-  // purchases made before the webhook was set up, or a delivery it missed.
   if (!hasApprovedPurchase) {
-    const liveSales = await fetchApprovedHotmartPurchases(email);
-    if (liveSales.length > 0) {
-      await supabase.from("customers").upsert({ email }, { onConflict: "email", ignoreDuplicates: true });
-      for (const sale of liveSales) {
-        await upsertHotmartPurchase(supabase, {
-          email,
-          hotmartProductId: sale.hotmartProductId,
-          transactionId: sale.transactionId,
-          status: "approved",
-          priceCents: sale.priceCents,
-        });
+    const { data, error } = await supabase
+      .from("purchases")
+      .select("id")
+      .eq("email", email)
+      .eq("status", "approved")
+      .limit(1);
+
+    if (error) {
+      console.error("[login] failed to check purchases", error);
+      return { error: "unexpected" };
+    }
+
+    hasApprovedPurchase = Boolean(data && data.length > 0);
+
+    // No local record — ask Hotmart directly before giving up. Covers
+    // purchases made before the webhook was set up, or a delivery it missed.
+    if (!hasApprovedPurchase) {
+      const liveSales = await fetchApprovedHotmartPurchases(email);
+      if (liveSales.length > 0) {
+        await supabase.from("customers").upsert({ email }, { onConflict: "email", ignoreDuplicates: true });
+        for (const sale of liveSales) {
+          await upsertHotmartPurchase(supabase, {
+            email,
+            hotmartProductId: sale.hotmartProductId,
+            transactionId: sale.transactionId,
+            status: "approved",
+            priceCents: sale.priceCents,
+          });
+        }
+        hasApprovedPurchase = true;
       }
-      hasApprovedPurchase = true;
     }
   }
 
