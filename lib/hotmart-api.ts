@@ -45,11 +45,25 @@ export function isHotmartApiConfigured() {
   );
 }
 
+/** Masks a secret for logs: keeps the length and a few edge chars so a
+ *  mismatch (wrong var, stale value, stray whitespace) is spottable
+ *  without ever printing the full value. */
+function mask(value: string | undefined) {
+  if (!value) return { set: false, length: 0, preview: null };
+  return { set: true, length: value.length, preview: `${value.slice(0, 6)}...${value.slice(-6)}` };
+}
+
 async function getAccessToken(): Promise<string | null> {
   const clientId = process.env.HOTMART_CLIENT_ID;
   const clientSecret = process.env.HOTMART_CLIENT_SECRET;
   const basicToken = process.env.HOTMART_BASIC_TOKEN;
   if (!clientId || !clientSecret || !basicToken) return null;
+
+  console.error("[hotmart api] requesting token with", {
+    clientId: mask(clientId),
+    clientSecret: mask(clientSecret),
+    basicToken: mask(basicToken),
+  });
 
   const url = new URL(TOKEN_URL);
   url.searchParams.set("grant_type", "client_credentials");
@@ -69,6 +83,7 @@ async function getAccessToken(): Promise<string | null> {
   }
 
   const data = (await response.json()) as HotmartTokenResponse;
+  console.error("[hotmart api] got token", mask(data.access_token));
   return data.access_token ?? null;
 }
 
