@@ -21,6 +21,16 @@ export async function POST(request: Request) {
 
   const expectedToken = process.env.HOTMART_WEBHOOK_TOKEN;
   if (!expectedToken || payload.hottok !== expectedToken) {
+    console.error("[hotmart webhook] hottok mismatch — rejecting", {
+      envVarSet: Boolean(expectedToken),
+      envVarLength: expectedToken?.length ?? 0,
+      envVarPreview: expectedToken ? `${expectedToken.slice(0, 4)}...${expectedToken.slice(-4)}` : null,
+      receivedHottok: Boolean(payload.hottok),
+      receivedLength: payload.hottok?.length ?? 0,
+      receivedPreview: payload.hottok
+        ? `${payload.hottok.slice(0, 4)}...${payload.hottok.slice(-4)}`
+        : null,
+    });
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
